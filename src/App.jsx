@@ -7,6 +7,7 @@ function App() {
   const [questionNumber, setQuestionNumber] = useState(1);
   const [earned, setEarned] = useState("₺ 0");
   const [stop, setStop] = useState(false);
+  const [showFullPyramid, setShowFullPyramid] = useState(false);
 
   const moneyPyramid = useMemo(
     () => [
@@ -193,6 +194,14 @@ function App() {
     setQuestionNumber(1);
     setEarned("₺ 0");
     setStop(false);
+    setShowFullPyramid(false);
+  };
+
+  const getVisibleLevels = () => {
+    const currentIndex = moneyPyramid.findIndex((m) => m.id === questionNumber);
+    const startIndex = Math.max(0, currentIndex - 1);
+    const endIndex = Math.min(moneyPyramid.length - 1, currentIndex + 2);
+    return moneyPyramid.slice(startIndex, endIndex + 1);
   };
 
   return (
@@ -211,6 +220,28 @@ function App() {
               <div className="timer">
                 <Timer setStop={setStop} questionNumber={questionNumber} />
               </div>
+
+              <div className="miniPyramid">
+                {getVisibleLevels().map((m) => (
+                  <div
+                    key={m.id}
+                    className={
+                      questionNumber === m.id
+                        ? "miniPyramidItem active"
+                        : "miniPyramidItem"
+                    }
+                  >
+                    <span className="miniPyramidItemNumber">{m.id}</span>
+                    <span className="miniPyramidItemAmount">{m.amount}</span>
+                  </div>
+                ))}
+                <button
+                  className="showMoreButton"
+                  onClick={() => setShowFullPyramid(!showFullPyramid)}
+                >
+                  {showFullPyramid ? "Gizle" : "Tümünü Göster"}
+                </button>
+              </div>
             </div>
             <div className="bottom">
               <Trivia
@@ -223,18 +254,29 @@ function App() {
           </>
         )}
       </div>
-      <div className="moneyList">
-        {moneyPyramid.map((m) => (
-          <li
-            key={m.id}
-            className={
-              questionNumber === m.id ? "moneyListItem active" : "moneyListItem"
-            }
-          >
-            <span className="moneyListItemNumber">{m.id}</span>
-            <span className="moneyListItemAmount">{m.amount}</span>
-          </li>
-        ))}
+
+      <div className={`moneyList ${showFullPyramid ? "visible" : ""}`}>
+        <button
+          className="closeButton"
+          onClick={() => setShowFullPyramid(false)}
+        >
+          ✕
+        </button>
+        <ul className="moneyListItems">
+          {moneyPyramid.map((m) => (
+            <li
+              key={m.id}
+              className={
+                questionNumber === m.id
+                  ? "moneyListItem active"
+                  : "moneyListItem"
+              }
+            >
+              <span className="moneyListItemNumber">{m.id}</span>
+              <span className="moneyListItemAmount">{m.amount}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
