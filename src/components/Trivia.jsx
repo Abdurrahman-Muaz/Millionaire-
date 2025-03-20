@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../App.css";
+import "../app.css";
 
 const Trivia = ({ data, setStop, setQuestionNumber, questionNumber }) => {
   const [question, setQuestion] = useState(null);
