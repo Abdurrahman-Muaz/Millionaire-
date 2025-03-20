@@ -189,11 +189,22 @@ function App() {
       setEarned(moneyPyramid.find((m) => m.id === questionNumber - 1).amount);
   }, [questionNumber, moneyPyramid]);
 
+  const resetGame = () => {
+    setQuestionNumber(1);
+    setEarned("₺ 0");
+    setStop(false);
+  };
+
   return (
     <div className="app">
       <div className="main">
         {stop ? (
-          <h1 className="endText"> {earned} : Kazandınız </h1>
+          <div>
+            <h1 className="endText"> {earned} : Kazandınız </h1>
+            <button className="restartButton" onClick={resetGame}>
+              Yeniden Başlat
+            </button>
+          </div>
         ) : (
           <>
             <div className="top">
