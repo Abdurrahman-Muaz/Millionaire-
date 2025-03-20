@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
-import "./App.css";
+import "./app.css";
 import Trivia from "./components/Trivia";
 
 function App() {
